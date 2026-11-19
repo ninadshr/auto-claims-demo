@@ -1,0 +1,267 @@
+{
+  "note": "Golden set for the eval panel. Ground truth for the four live samples is sourced from the Wikimedia Commons file descriptions (see public/samples/ATTRIBUTION.md); predictions are the ensemble outputs recorded during the verified Phase 3 E2E runs on 2026-11-18 (open-weight tier: kimi-k3p1-pro primary + deepseek-v4p1-flash verifier). The two simulated rows exercise the AUTO_APPROVE happy path and the non-vehicle guardrail without a live VLM call, so threshold trade-offs can be inspected instantly.",
+  "recorded_at": "2026-11-18",
+  "prompt_version": "v1.0",
+  "rows": [
+    {
+      "id": "citroen_missing_front_bumper",
+      "label": "Vehicle-ID disagreement stress test (missing front bumper)",
+      "image": "/samples/citroen_missing_front_bumper.jpg",
+      "simulated": false,
+      "expected_route": "ESCALATE",
+      "ground_truth": {
+        "is_vehicle": true,
+        "make": "Chrysler",
+        "model": "Cirrus",
+        "colour_family": "red",
+        "vehicle_class": "sedan",
+        "damage_items": [
+          { "panel": "front_bumper", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "grille", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "hood", "severity": "moderate", "operation": "REPAIR" },
+          { "panel": "front_right_fender", "severity": "moderate", "operation": "REPAIR" },
+          { "panel": "headlamp_right", "severity": "severe", "operation": "REPLACE" }
+        ]
+      },
+      "prediction": {
+        "is_vehicle": true,
+        "image_quality": "acceptable",
+        "has_airbag_deployment": false,
+        "has_structural_indicators": false,
+        "is_total_loss_likely": false,
+        "has_preexisting_wear_only": false,
+        "make": "Chrysler",
+        "model": "Cirrus",
+        "colour": "Red",
+        "vehicle_class": "sedan",
+        "verifier_make": "Chrysler",
+        "verifier_model": "Concorde",
+        "agreement": 0.65,
+        "overall": 0.68,
+        "vehicle_id_score": 0.62,
+        "damage_score": 0.73,
+        "cost_score": 0.66,
+        "damage_items": [
+          { "panel": "front_bumper", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "grille", "severity": "destroyed", "operation": "REPLACE" }
+        ],
+        "latency_ms": 109000,
+        "prompt_tokens": 1480,
+        "completion_tokens": 2410
+      }
+    },
+    {
+      "id": "clean_car",
+      "label": "Undamaged vehicle — pre-existing wear only",
+      "image": "/samples/clean_car.jpg",
+      "simulated": false,
+      "expected_route": "REJECT",
+      "ground_truth": {
+        "is_vehicle": true,
+        "make": "Mercury",
+        "model": "Sable",
+        "colour_family": "green",
+        "vehicle_class": "sedan",
+        "damage_items": []
+      },
+      "prediction": {
+        "is_vehicle": true,
+        "image_quality": "good",
+        "has_airbag_deployment": false,
+        "has_structural_indicators": false,
+        "is_total_loss_likely": false,
+        "has_preexisting_wear_only": true,
+        "make": "Mercury",
+        "model": "Sable",
+        "colour": "Light Evergreen Metallic",
+        "vehicle_class": "sedan",
+        "verifier_make": "Mercury",
+        "verifier_model": "Sable",
+        "agreement": 1.0,
+        "overall": 0.74,
+        "vehicle_id_score": 0.88,
+        "damage_score": 0.0,
+        "cost_score": 0.0,
+        "damage_items": [],
+        "latency_ms": 34300,
+        "prompt_tokens": 1350,
+        "completion_tokens": 1900
+      }
+    },
+    {
+      "id": "accident_damaged_car",
+      "label": "Severe front-end collision — structural indicators",
+      "image": "/samples/accident_damaged_car.jpg",
+      "simulated": false,
+      "expected_route": "ESCALATE",
+      "ground_truth": {
+        "is_vehicle": true,
+        "make": "Chrysler",
+        "model": "Sebring",
+        "colour_family": null,
+        "vehicle_class": "sedan",
+        "damage_items": [
+          { "panel": "front_bumper", "severity": "destroyed", "operation": "REPLACE" },
+          { "panel": "grille", "severity": "destroyed", "operation": "REPLACE" },
+          { "panel": "hood", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "front_left_fender", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "front_right_fender", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "headlamp_left", "severity": "destroyed", "operation": "REPLACE" },
+          { "panel": "headlamp_right", "severity": "destroyed", "operation": "REPLACE" }
+        ]
+      },
+      "prediction": {
+        "is_vehicle": true,
+        "image_quality": "acceptable",
+        "has_airbag_deployment": false,
+        "has_structural_indicators": true,
+        "is_total_loss_likely": false,
+        "has_preexisting_wear_only": false,
+        "make": null,
+        "model": null,
+        "colour": null,
+        "vehicle_class": "sedan",
+        "verifier_make": "Chrysler",
+        "verifier_model": "Sebring",
+        "agreement": 0.525,
+        "overall": 0.52,
+        "vehicle_id_score": 0.34,
+        "damage_score": 0.78,
+        "cost_score": 0.59,
+        "damage_items": [
+          { "panel": "front_bumper", "severity": "destroyed", "operation": "REPLACE" },
+          { "panel": "grille", "severity": "destroyed", "operation": "REPLACE" },
+          { "panel": "hood", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "front_left_fender", "severity": "severe", "operation": "REPLACE" },
+          { "panel": "headlamp_left", "severity": "destroyed", "operation": "REPLACE" },
+          { "panel": "headlamp_right", "severity": "destroyed", "operation": "REPLACE" }
+        ],
+        "latency_ms": 115000,
+        "prompt_tokens": 1520,
+        "completion_tokens": 2980
+      }
+    },
+    {
+      "id": "broken_front_bumper",
+      "label": "Moderate bumper damage — AUTO_APPROVE candidate that the verifier correctly holds for review",
+      "image": "/samples/broken_front_bumper.jpg",
+      "simulated": false,
+      "expected_route": "AUTO_APPROVE",
+      "ground_truth": {
+        "is_vehicle": true,
+        "make": "Opel",
+        "model": "Vectra",
+        "colour_family": null,
+        "vehicle_class": "sedan",
+        "damage_items": [
+          { "panel": "front_bumper", "severity": "moderate", "operation": "REPAIR" }
+        ]
+      },
+      "prediction": {
+        "is_vehicle": true,
+        "image_quality": "good",
+        "has_airbag_deployment": false,
+        "has_structural_indicators": false,
+        "is_total_loss_likely": false,
+        "has_preexisting_wear_only": false,
+        "make": "Opel",
+        "model": "Vectra",
+        "colour": "Silver",
+        "vehicle_class": "sedan",
+        "verifier_make": "Ford",
+        "verifier_model": "Mondeo",
+        "agreement": 0.35,
+        "overall": 0.6863,
+        "vehicle_id_score": 0.66,
+        "damage_score": 0.74,
+        "cost_score": 0.7,
+        "damage_items": [
+          { "panel": "front_bumper", "severity": "moderate", "operation": "REPAIR" }
+        ],
+        "latency_ms": 102000,
+        "prompt_tokens": 1410,
+        "completion_tokens": 2260
+      }
+    },
+    {
+      "id": "minor_fender_dent_simulated",
+      "label": "Simulated edge case — minor single-panel dent (STP happy path)",
+      "image": null,
+      "simulated": true,
+      "expected_route": "AUTO_APPROVE",
+      "ground_truth": {
+        "is_vehicle": true,
+        "make": "Honda",
+        "model": "Civic",
+        "colour_family": "blue",
+        "vehicle_class": "sedan",
+        "damage_items": [
+          { "panel": "front_left_fender", "severity": "minor", "operation": "REPAIR" }
+        ]
+      },
+      "prediction": {
+        "is_vehicle": true,
+        "image_quality": "good",
+        "has_airbag_deployment": false,
+        "has_structural_indicators": false,
+        "is_total_loss_likely": false,
+        "has_preexisting_wear_only": false,
+        "make": "Honda",
+        "model": "Civic",
+        "colour": "Blue",
+        "vehicle_class": "sedan",
+        "verifier_make": "Honda",
+        "verifier_model": "Civic",
+        "agreement": 1.0,
+        "overall": 0.87,
+        "vehicle_id_score": 0.92,
+        "damage_score": 0.9,
+        "cost_score": 0.84,
+        "damage_items": [
+          { "panel": "front_left_fender", "severity": "minor", "operation": "REPAIR" }
+        ],
+        "latency_ms": 38000,
+        "prompt_tokens": 1300,
+        "completion_tokens": 1750
+      }
+    },
+    {
+      "id": "non_vehicle_guardrail_simulated",
+      "label": "Simulated edge case — non-vehicle photo (guardrail)",
+      "image": null,
+      "simulated": true,
+      "expected_route": "REJECT",
+      "ground_truth": {
+        "is_vehicle": false,
+        "make": null,
+        "model": null,
+        "colour_family": null,
+        "vehicle_class": "unknown",
+        "damage_items": []
+      },
+      "prediction": {
+        "is_vehicle": false,
+        "image_quality": "good",
+        "has_airbag_deployment": false,
+        "has_structural_indicators": false,
+        "is_total_loss_likely": false,
+        "has_preexisting_wear_only": false,
+        "make": null,
+        "model": null,
+        "colour": null,
+        "vehicle_class": "unknown",
+        "verifier_make": null,
+        "verifier_model": null,
+        "agreement": null,
+        "overall": 0.0,
+        "vehicle_id_score": 0.0,
+        "damage_score": 0.0,
+        "cost_score": 0.0,
+        "damage_items": [],
+        "latency_ms": 21000,
+        "prompt_tokens": 1250,
+        "completion_tokens": 900
+      }
+    }
+  ]
+}
