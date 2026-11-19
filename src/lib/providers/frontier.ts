@@ -95,44 +95,94 @@ async function postJson(
   return response.json();
 }
 
+interface AnthropicContentBlock {
+  type: string;
+  text?: string;
+  name?: string;
+  input?: unknown;
+}
+
+interface AnthropicMessagesResponse {
+  content?: AnthropicContentBlock[];
+  usage?: { input_tokens: number; output_tokens: number };
+}
+
+/**
+ * Structured output arrives either as plain text blocks (output_config path)
+ * or as a forced tool_use block whose `input` already holds the parsed
+ * assessment object — prefer the tool input when present.
+ */
+function anthropicOutputText(json: AnthropicMessagesResponse): string {
+  const toolBlock = (json.content ?? []).find(
+    (part) => part.type === "tool_use" && part.input != null,
+  );
+  if (toolBlock) return JSON.stringify(toolBlock.input);
+  return (json.content ?? [])
+    .filter((part) => part.type === "text" && typeof part.text === "string")
+    .map((part) => part.text)
+    .join("\n");
+}
+
 async function callAnthropic(
   imageDataUri: string,
   model: string,
 ): Promise<RawCallOutput> {
   const { mediaType, base64 } = parseImageDataUri(imageDataUri);
   const startedAt = Date.now();
-  const json = (await postJson(
-    "https://api.anthropic.com/v1/messages",
-    {
-      "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
-      "anthropic-version": "2023-06-01",
-      "Content-Type": "application/json",
-    },
-    {
-      model,
-      max_tokens: MAX_TOKENS,
-      // No temperature: deprecated on claude-sonnet-5-5 (model-managed setting).
-      system: APPRAISER_SYSTEM_PROMPT,
-      messages: [
+  const url = "https://api.anthropic.com/v1/messages";
+  const headers = {
+    "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
+    "anthropic-version": "2023-06-01",
+    "Content-Type": "application/json",
+  };
+  const baseBody = {
+    model,
+    max_tokens: MAX_TOKENS,
+    // No temperature: deprecated on claude-sonnet-5-5 (model-managed setting).
+    system: APPRAISER_SYSTEM_PROMPT,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+          { type: "text", text: APPRAISER_USER_INSTRUCTION },
+        ],
+      },
+    ],
+  } as const;
+
+  // Primary path: Anthropic Structured Outputs.
+  let json: AnthropicMessagesResponse;
+  try {
+    json = (await postJson(url, headers, {
+      ...baseBody,
+      output_config: {
+        format: {
+          type: "json_schema",
+          schema: visionAssessmentJsonSchema(),
+        },
+      },
+    })) as AnthropicMessagesResponse;
+  } catch (err) {
+    // Fallback: output_config rejects some JSON Schema keywords; forced
+    // tool_use enforces the same schema via tool_choice instead.
+    const msg = err instanceof Error ? err.message : String(err);
+    if (!/^Frontier 4\d\d/.test(msg)) throw err;
+    json = (await postJson(url, headers, {
+      ...baseBody,
+      tools: [
         {
-          role: "user",
-          content: [
-            { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
-            { type: "text", text: APPRAISER_USER_INSTRUCTION },
-          ],
+          name: "submit_assessment",
+          description: "Submit the structured vehicle damage assessment.",
+          input_schema: visionAssessmentJsonSchema(),
         },
       ],
-    },
-  )) as {
-    content?: Array<{ type: string; text?: string }>;
-    usage?: { input_tokens: number; output_tokens: number };
-  };
-  const text = (json.content ?? [])
-    .filter((part) => part.type === "text" && typeof part.text === "string")
-    .map((part) => part.text)
-    .join("\n");
+      tool_choice: { type: "tool", name: "submit_assessment" },
+    })) as AnthropicMessagesResponse;
+  }
+
   return {
-    content: text,
+    content: anthropicOutputText(json),
     usage: json.usage
       ? {
           prompt_tokens: json.usage.input_tokens,
