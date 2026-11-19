@@ -111,7 +111,7 @@ async function callAnthropic(
     {
       model,
       max_tokens: MAX_TOKENS,
-      temperature: 0,
+      // No temperature: deprecated on claude-sonnet-5-5 (model-managed setting).
       system: APPRAISER_SYSTEM_PROMPT,
       messages: [
         {
