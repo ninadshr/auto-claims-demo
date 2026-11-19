@@ -19,15 +19,17 @@ import {
  */
 
 const TIMEOUT_MS = 120_000;
-const MAX_TOKENS = 4096;
+// Headroom for adaptive thinking + full JSON payload — truncation mid-schema
+// fails zod validation downstream, so the cap stays generous.
+const MAX_TOKENS = 8192;
 
 const FRONTIER_MODELS: Record<
   Exclude<import("./types").ModelTier, "open-weight">,
   { model: string; label: string; envKey: string }
 > = {
   anthropic: {
-    model: process.env.ANTHROPIC_VISION_MODEL ?? "claude-sonnet-4-5",
-    label: "Anthropic (Frontier)",
+    model: process.env.ANTHROPIC_VISION_MODEL ?? "claude-sonnet-5-5",
+    label: "Claude Sonnet 5.5",
     envKey: "ANTHROPIC_API_KEY",
   },
   openai: {

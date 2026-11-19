@@ -13,7 +13,7 @@ const PRICES_USD_PER_MTOK: Record<string, { input: number; output: number }> = {
   "accounts/fireworks/models/kimi-k3p1-pro": { input: 1.0, output: 3.0 },
   "accounts/fireworks/models/deepseek-v4p1-flash": { input: 0.15, output: 0.6 },
   "accounts/fireworks/models/qwen3p8-max": { input: 0.2, output: 0.6 },
-  "claude-sonnet-4-5": { input: 3.0, output: 15.0 },
+  "claude-sonnet-5-5": { input: 3.0, output: 15.0 },
   "gpt-4o": { input: 2.5, output: 10.0 },
   "gemini-2.5-flash": { input: 0.3, output: 2.5 },
 };
