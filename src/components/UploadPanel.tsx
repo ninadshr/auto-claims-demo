@@ -23,8 +23,8 @@ export const SAMPLES = [
     label: "Minor Bumper Scrape",
     hint: "Typical auto-approve candidate — minor cosmetic scuff, clear ID, no structural risk.",
     expectedRoute: "AUTO_APPROVE",
-    width: 1280,
-    height: 714,
+    width: 1049,
+    height: 642,
   },
   {
     file: "/samples/accident_damaged_car.jpg",
