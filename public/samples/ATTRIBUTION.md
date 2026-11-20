@@ -9,6 +9,7 @@ Each was resized to ≤1280 px width for demo use. Original file pages include f
 | `broken_front_bumper.jpg` | [Front bumper broken.jpg](https://commons.wikimedia.org/wiki/File:Front_bumper_broken.jpg) | Tiia Monto | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
 | `citroen_missing_front_bumper.jpg` | [2000 Chrysler Cirrus with missing bumper.jpg](https://commons.wikimedia.org/wiki/File:2000_Chrysler_Cirrus_with_missing_bumper.jpg) | Nyttend | [Public domain](https://en.wikipedia.org/wiki/Public_domain) |
 | `clean_car.jpg` | [1995 Mercury Sable GS sedan, front left, 04-11-2021.jpg](https://commons.wikimedia.org/wiki/File:1995_Mercury_Sable_GS_sedan,_front_left,_04-11-2021.jpg) | MercurySable99 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| `honda_minor_fender_bender.jpg` | **TODO: add Commons source file page, author, and license** — added 2026-11-20 as the minor-cosmetic AUTO_APPROVE sample; must be attributed before any public redistribution beyond this demo. | — | — |
 
 Notes for the demo's four routing scenarios:
 

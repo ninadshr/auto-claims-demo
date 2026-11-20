@@ -19,12 +19,12 @@ export const SAMPLES = [
     height: 720,
   },
   {
-    file: "/samples/broken_front_bumper.jpg",
-    label: "Moderate bumper damage",
-    hint: "AUTO_APPROVE candidate — watch the verifier",
+    file: "/samples/honda_minor_fender_bender.jpg",
+    label: "Minor Bumper Scrape",
+    hint: "Typical auto-approve candidate — minor cosmetic scuff, clear ID, no structural risk.",
     expectedRoute: "AUTO_APPROVE",
     width: 1280,
-    height: 717,
+    height: 714,
   },
   {
     file: "/samples/accident_damaged_car.jpg",

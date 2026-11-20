@@ -143,10 +143,10 @@
     },
     {
       "id": "broken_front_bumper",
-      "label": "Moderate bumper damage — AUTO_APPROVE candidate that the verifier correctly holds for review",
+      "label": "Missing front bumper & identity disagreement — ESCALATE (Opel/Ford verifier split)",
       "image": "/samples/broken_front_bumper.jpg",
       "simulated": false,
-      "expected_route": "AUTO_APPROVE",
+      "expected_route": "ESCALATE",
       "ground_truth": {
         "is_vehicle": true,
         "make": "Opel",
