@@ -1,6 +1,6 @@
 # Auto Claims Damage Assessment — AI Triage & Estimate Prototype
 
-**Live demo:** `https://auto-claims-demo-ed6v9azte-ninad-shringarpures-projects.vercel.app`
+**Live demo:** `https://auto-claims-demo.vercel.app`
 
 This prototype is an **adjuster decision-support & straight-through-processing (STP) triage engine** for a high-volume US auto carrier. A customer submits a single claim photo; an ensemble of open-weight vision models extracts *structured physical damage facts* (never dollars); a deterministic TypeScript rate-card engine prices parts, labor, paint, blends, and fees; and a per-field confidence + cross-model-agreement router decides whether the claim is **AUTO_APPROVE**, **ESCALATE** to a human, or **REJECT**. Uncertain or safety-critical slices flow into Scale AI human-labeling and Nucleus slice-curation adapters, closing the data flywheel that makes the next model better.
 
